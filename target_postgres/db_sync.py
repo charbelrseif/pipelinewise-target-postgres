@@ -536,6 +536,8 @@ class DbSync:
         columns = self.get_table_columns(table_name)
         columns_dict = {column['column_name'].lower(): column for column in columns}
 
+        print('database columns:' columns)
+
         columns_to_add = [
             column_clause(
                 name,
@@ -557,6 +559,8 @@ class DbSync:
             if name.lower() in columns_dict and
             columns_dict[name.lower()]['data_type'].lower() != column_type(properties_schema).lower()
         ]
+
+        print('catalog columns:', self.flatten_schema.items())
 
         for (column_name, column) in columns_to_replace:
             self.version_column(column_name, stream)
