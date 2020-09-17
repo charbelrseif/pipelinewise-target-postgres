@@ -40,7 +40,8 @@ def validate_config(config):
 def column_type(schema_property):
     property_type = schema_property['type']
     property_format = schema_property['format'] if 'format' in schema_property else None
-    col_type = 'character varying'
+    #--cschanges col_type = 'character varying'
+    col_type = 'text'
     if 'object' in property_type or 'array' in property_type:
         col_type = 'jsonb'
 
@@ -49,13 +50,16 @@ def column_type(schema_property):
     # TODO: Detect if timezone postfix exists in the JSON and find if TIMESTAMP WITHOUT TIME ZONE or
     # TIMESTAMP WITH TIME ZONE is the better column type
     elif property_format == 'date-time':
-        col_type = 'timestamp without time zone'
+        #--cschanges col_type = 'timestamp without time zone'
+        col_type = 'timestamp with time zone'
     elif property_format == 'time':
-        col_type = 'time without time zone'
+        #--cschanges col_type = 'time without time zone'
+        col_type = 'timestamp with time zone'
     elif 'number' in property_type:
         col_type = 'double precision'
     elif 'integer' in property_type and 'string' in property_type:
-        col_type = 'character varying'
+        #--cschanges col_type = 'character varying'
+        col_type = 'text'
     elif 'integer' in property_type:
         if 'maximum' in schema_property:
             if schema_property['maximum'] <= 32767:
@@ -65,7 +69,8 @@ def column_type(schema_property):
             elif schema_property['maximum'] <= 9223372036854775807:
                 col_type = 'bigint'
         else:
-            col_type = 'numeric'
+            #--cschanges col_type = 'numeric'
+            col_type = 'bigint'
     elif 'boolean' in property_type:
         col_type = 'boolean'
 
